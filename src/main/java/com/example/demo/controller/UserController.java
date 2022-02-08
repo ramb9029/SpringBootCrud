@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.service.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,16 +14,16 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImp userServiceImp;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserServiceImp userServiceImp) {
+        this.userServiceImp = userServiceImp;
     }
 
     @GetMapping("/")
     public String findAll(Model model) {
-        List<User> users = userService.getAllUsers();
+        List<User> users = userServiceImp.getAllUsers();
         model.addAttribute("users", users);
         return "users-list";
     }
@@ -35,26 +35,26 @@ public class UserController {
 
     @PostMapping("/user-create")
     public String createUser(User user) {
-        userService.saveUser(user);
+        userServiceImp.saveUser(user);
         return "redirect:/";
     }
 
     @GetMapping("user-delete/{id}")
     public String deleteUser(@PathVariable("id") Long id){
-        userService.deleteById(id);
+        userServiceImp.deleteById(id);
         return "redirect:/";
     }
 
     @GetMapping("/user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model){
-        User user = userService.findById(id);
+        User user = userServiceImp.findById(id);
         model.addAttribute("user", user);
         return "user-update";
     }
 
     @PostMapping("/user-update")
     public String updateUser(User user){
-        userService.saveUser(user);
+        userServiceImp.saveUser(user);
         return "redirect:/";
     }
 }
